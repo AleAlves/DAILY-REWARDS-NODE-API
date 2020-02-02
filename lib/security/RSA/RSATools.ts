@@ -5,7 +5,7 @@ const STANDAR_ENCRYPT_ENCODE = 'base64'
 const STANDARD_DECRYPT_FORMAT = 'json'
 
 const RSAKey = new NodeRSA({
-    b: 1024
+    b: 2048
 });
 
 RSAKey.setOptions({ encryptionScheme: ALGORITHM });

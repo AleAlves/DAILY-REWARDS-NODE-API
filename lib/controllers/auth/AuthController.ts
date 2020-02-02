@@ -60,9 +60,17 @@ export class AuthController extends BaseController {
 
         const token = new JWTSession(req.params.access);
 
-        let userData = CryptoTools.AES().decrypt(req.body.data, token.AESKey, token.AESSalt, token.AESIV)
+        Logger.log(token, AuthController.name, "login", "Token")
+
+        Logger.log(req.body.data, AuthController.name, "login", "userData")
+
+        let userData = CryptoTools.AES().decrypt(req.body.data, token)
+
+        Logger.log(userData, AuthController.name, "login", "userData")
 
         let userModel = User(JSON.parse(userData))
+
+        Logger.log(userModel, AuthController.name, "login", "userModel")
 
         if (userModel == null) {
             super.send(res, undefined, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST)
@@ -71,11 +79,21 @@ export class AuthController extends BaseController {
 
         User.findOne({ 'firebaseID': userModel.firebaseID }, (error, user) => {
             if (error) {
-                super.send(res, undefined, undefined, new HTTPStatus.BUSINESS.DUPLICATED_REGISTER);
+                Logger.log(error, AuthController.name, "findOne")
+                super.send(res, undefined, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
                 return
             }
             if (user) {
-                let sessionToken = this.generateSessionToken(user, token)
+
+                token.userID = user._id
+
+                token.firebaseID = user.firebaseID
+        
+                let session = new JWTSession(token, JWTType.SESSION)
+        
+                let sessionTokenEncrypted = CryptoTools.JWT().signSessionToken(session)
+        
+                let sessionToken = JSON.parse(JSON.stringify(new SessionTokenModel(sessionTokenEncrypted)))
 
                 super.send(res, sessionToken)
                 return
@@ -83,27 +101,24 @@ export class AuthController extends BaseController {
             else {
                 userModel.save((error, user) => {
                     if (error) {
-                        super.send(res, undefined, undefined, new HTTPStatus.BUSINESS.DUPLICATED_REGISTER);
+                        Logger.log(error, AuthController.name, "save")
+                        super.send(res, undefined, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
                         return
                     }
 
-                    let sessionToken = this.generateSessionToken(user, token)
+                    token.userID = user._id
+
+                    token.firebaseID = user.firebaseID
+            
+                    let session = new JWTSession(token, JWTType.SESSION)
+            
+                    let sessionTokenEncrypted = CryptoTools.JWT().signSessionToken(session)
+            
+                    let sessionToken = JSON.parse(JSON.stringify(new SessionTokenModel(sessionTokenEncrypted)))
 
                     super.send(res, sessionToken)
                 });
             }
         });
-    }
-
-    private generateSessionToken(user: any, token: JWTSession) {
-        token.userID = user._id
-
-        token.firebaseID = user.firebaseID
-
-        let session = new JWTSession(token, JWTType.SESSION)
-
-        let sessionTokenEncrypted = CryptoTools.JWT().signSessionToken(session)
-
-        return JSON.parse(JSON.stringify(new SessionTokenModel(sessionTokenEncrypted)))
     }
 }

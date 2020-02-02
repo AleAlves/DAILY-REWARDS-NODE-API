@@ -23,7 +23,7 @@ export class AuthRoutes extends BaseRouter {
     }
 
     private accessToken(){
-        this.app.route(this.root +  "v1" + '/access-token').get(this.authController.accessToken)
+        this.app.route(this.root +  "v1" + '/access-token').post(this.authController.accessToken)
     }
 
     private validateToken(){

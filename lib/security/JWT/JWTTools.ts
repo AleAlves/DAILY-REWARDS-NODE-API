@@ -48,7 +48,7 @@ export class JWTTools {
         return this.signSessionToken(newToken)
     }
 
-    public async decodeToken(token: String) {
+    public decodeToken(token: String) {
         return JWT.verify(token, key)
     }
 

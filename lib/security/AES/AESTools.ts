@@ -1,3 +1,6 @@
+
+import { JWTSession } from "../../security/JWT/model/JWTSession";
+
 const CryptoJS = require('crypto-js');
 const KEY_SIZE = 8
 const ITERATIONS = 2048
@@ -25,13 +28,21 @@ export class AESTools {
         }).toString();
     }
 
-    public decrypt(data: String, key: String, salt: String, iv: String) {
+    public decrypt(data: String, token : JWTSession) {
 
-        console.log("\nCryptoUtil : decrypt\n");
-        console.log("key: " + key);
+        console.log("\nCryptoUtil : decrypt\n")
+        console.log("key: " + JSON.stringify(token))
 
-        salt = CryptoJS.enc.Utf8.parse(salt);
-        iv = CryptoJS.enc.Base64.parse(iv);
+        console.log('\n ---- CRYPTO -----')
+        console.log('iv: ' + token.AESIV)
+        console.log('key: ' + token.AESKey)
+        console.log('salt: ' + token.AESSalt);
+        console.log('cipherData: ' + data)
+        console.log('\n ---- CRYPTO -----\n')
+
+        let salt = CryptoJS.enc.Utf8.parse(token.AESSalt)
+        let iv = CryptoJS.enc.Base64.parse(token.AESIV)
+        let key = token.AESKey
 
         var keyBits = CryptoJS.PBKDF2(key, salt, {
             hasher: CryptoJS.algo.SHA1,
@@ -39,12 +50,12 @@ export class AESTools {
             iterations: ITERATIONS
         });
 
-        console.log('\n ---- CRYPTO -----');
-        console.log('iv: ' + iv);
-        console.log('key: ' + key);
+        console.log('\n ---- CRYPTO -----')
+        console.log('iv: ' + iv)
+        console.log('key: ' + key)
         console.log('salt: ' + salt);
-        console.log('cipherData: ' + data);
-        console.log('\n ---- CRYPTO -----\n');
+        console.log('cipherData: ' + data)
+        console.log('\n ---- CRYPTO -----\n')
 
         return JSON.parse(JSON.stringify(CryptoJS.AES.decrypt(data, keyBits, {
             iv: iv,
