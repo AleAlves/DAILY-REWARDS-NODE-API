@@ -41,11 +41,11 @@ const recurrence = new Schema({
 }, { usePushEach: true });
 
 export const TaskSchema = new Schema({
-    uid: {
+    onwerUid: {
         type: String,
-        required: 'FirebaseID required'
+        required: 'uid required'
     },
-    name: {
+    title: {
         type: String,
         required: 'Name required'
     },
@@ -63,7 +63,7 @@ export const TaskSchema = new Schema({
     },
     deadLine: {
         type: Date,
-        default: Date.now
+        required: false
     },
     recurrence: [recurrence]
 

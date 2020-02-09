@@ -35,7 +35,7 @@ export class UserController extends BaseController {
     }
 
     public find(req: Request, res: Response) {
-        User.findById(req.params.firebaseID, (error, user) => {
+        User.findById(req.params.uid, (error, user) => {
             if (error) {
                 super.send(res, error);
             }
@@ -44,7 +44,7 @@ export class UserController extends BaseController {
     }
 
     public update(req: Request, res: Response) {
-        User.findOneAndUpdate({ _id: req.params.firebaseID }, req.body, { new: true }, (error, user) => {
+        User.findOneAndUpdate({ _id: req.params.uid }, req.body, { new: true }, (error, user) => {
             if (error) {
                 super.send(res, error);
             }
@@ -53,7 +53,7 @@ export class UserController extends BaseController {
     }
 
     public delete(req: Request, res: Response) {
-        User.remove({ _id: req.params.firebaseID }, (error, user) => {
+        User.remove({ _id: req.params.uid }, (error, user) => {
             if (error) {
                 super.send(res, error);
             }

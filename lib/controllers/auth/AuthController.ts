@@ -77,7 +77,7 @@ export class AuthController extends BaseController {
             return
         }
 
-        User.findOne({ 'firebaseID': userModel.firebaseID }, (error, user) => {
+        User.findOne({ 'uid': userModel.uid }, (error, user) => {
             if (error) {
                 Logger.log(error, AuthController.name, "findOne")
                 super.send(res, undefined, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
@@ -87,7 +87,7 @@ export class AuthController extends BaseController {
 
                 token.userID = user._id
 
-                token.firebaseID = user.firebaseID
+                token.uid = user.uid
         
                 let session = new JWTSession(token, JWTType.SESSION)
         
@@ -108,7 +108,7 @@ export class AuthController extends BaseController {
 
                     token.userID = user._id
 
-                    token.firebaseID = user.firebaseID
+                    token.uid = user.firebaseID
             
                     let session = new JWTSession(token, JWTType.SESSION)
             

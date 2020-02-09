@@ -4,9 +4,9 @@ import * as mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 export const UserSchema = new Schema({
-    firebaseID: {
+    uid: {
         type: String,
-        required: 'FirebaseID required'
+        required: 'Uid required'
     },
     name: {
         type: String,
@@ -23,5 +23,9 @@ export const UserSchema = new Schema({
     created: {
         type: Date,
         default: Date.now
+    },
+    allowedTasks : {
+        type: Number,
+        default: 5
     }
 });

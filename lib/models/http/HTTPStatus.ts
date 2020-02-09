@@ -4,6 +4,17 @@ export class HTTPStatus {
 
     static BUSINESS = class {
 
+        static TASKS_LIMIT_REACHED = class implements Status {
+
+            code(): Number {
+                return 422
+            }
+
+            status(): String {
+                return "Tasks limit reached"
+            }
+        }
+
         static DUPLICATED_REGISTER = class implements Status {
 
             code(): Number {
