@@ -73,14 +73,14 @@ export class AuthController extends BaseController {
         Logger.log(userModel, AuthController.name, "login", "userModel")
 
         if (userModel == null) {
-            super.send(res, undefined, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST)
+            super.send(res, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST)
             return
         }
 
         User.findOne({ 'uid': userModel.uid }, (error, user) => {
             if (error) {
                 Logger.log(error, AuthController.name, "findOne")
-                super.send(res, undefined, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
+                super.send(res, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
                 return
             }
             if (user) {
@@ -102,7 +102,7 @@ export class AuthController extends BaseController {
                 userModel.save((error, user) => {
                     if (error) {
                         Logger.log(error, AuthController.name, "save")
-                        super.send(res, undefined, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
+                        super.send(res, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
                         return
                     }
 

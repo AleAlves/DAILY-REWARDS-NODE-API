@@ -6,7 +6,7 @@ export class TaskRoutes extends BaseRouter {
 
     private app: any
     private root: String
-    private taskController: TaskController = new TaskController();
+    private taskController: TaskController = new TaskController()
 
     constructor(app: any, root: String) {
         super()

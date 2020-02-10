@@ -8,22 +8,24 @@ import { HTTPStatus } from '../../models/http/HTTPStatus';
 const NPS = mongoose.model('NPS', NPSSchema);
 
 export class NPSController extends BaseController {
+
     public add(req: Request, res: Response) {
         //TODO: authorizedUser
         let nps = req.body
         nps.userID = super.session(req).userID
+
         nps.versionApp = NPSController.transformVersionToIntWithPadding(nps.versionApp)
         let newNPS = new NPS(req.body);
 
         NPS.findOneAndUpdate({ 'userID': newNPS.userID, 'versionApp': newNPS.versionApp }, newNPS, (err, nps) => {
             if (nps) {
-                super.send(res, nps, 'Obrigado pela avaliação!');
+                super.send(res, nps, undefined, 'Obrigado pela avaliação!');
             } else {
                 newNPS.save((err, nps) => {
                     if (err) {
-                        super.send(res, undefined, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
+                        super.send(res, err, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
                     }
-                    super.send(res, nps, 'Obrigado pela avaliação!');
+                    super.send(res, nps, undefined, 'Obrigado pela avaliação!');
                 });
             }
         });
@@ -59,7 +61,7 @@ export class NPSController extends BaseController {
     public get(req: Request, res: Response) {
         NPS.find({}, (err, nps) => {
             if (err) {
-                super.send(res, undefined, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
+                super.send(res, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
             }
             super.send(res, nps);
         });
@@ -68,7 +70,7 @@ export class NPSController extends BaseController {
     public getWithID(req: Request, res: Response) {
         NPS.findById(req.params.npsID, (err, nps) => {
             if (err) {
-                super.send(res, undefined, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
+                super.send(res, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
             }
             super.send(res, nps);
         });
@@ -77,7 +79,7 @@ export class NPSController extends BaseController {
     public update(req: Request, res: Response) {
         NPS.findOneAndUpdate({ _id: req.params.npsID }, req.body, { new: true }, (err, nps) => {
             if (err) {
-                super.send(res, undefined, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
+                super.send(res, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
             }
             super.send(res, nps);
         });
@@ -86,7 +88,7 @@ export class NPSController extends BaseController {
     public delete(req: Request, res: Response) {
         NPS.remove({ _id: req.params.npsID }, (err, nps) => {
             if (err) {
-                super.send(res, undefined, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
+                super.send(res, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
             }
             super.send(res, nps);
         });
