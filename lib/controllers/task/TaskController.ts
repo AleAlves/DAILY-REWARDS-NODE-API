@@ -12,6 +12,11 @@ import { Logger } from '../../tools/Logger'
 import { BaseController } from "../BaseController"
 
 import { AddTaskUseCase } from "../../usecase/task/AddTaskUseCase"
+import { GetTasksUseCase } from "../../usecase/task/GetTasksUseCase"
+import { GetTaskByIDUseCase } from "../../usecase/task/GetTaskByIDUseCase"
+import { GetTasksLimitUseCase } from "../../usecase/task/GetTasksLimitUseCase"
+import { UpdateTaskUseCase } from "../../usecase/task/UpdateTaskUseCase"
+import { DeleteTaskUseCase } from "../../usecase/task/DeleteTaskUseCase"
 
 const User = mongoose.model('User', UserSchema);
 const Task = mongoose.model('Task', TaskSchema);
@@ -20,30 +25,28 @@ export class TaskController extends BaseController {
 
     public add(req: Request, res: Response) {
 
-        let useCase = new AddTaskUseCase()
+        let addUseCase = new AddTaskUseCase()
+        let limitUseCase = new GetTasksLimitUseCase()
 
         const token = new JWTSession(req.params.session);
 
-        //encrypt
-        //let taskModel = CryptoTools.AES().decrypt(req.body.data, token)
-
-        let taskModel = new Task(req.body.data)
+        let taskModel = CryptoTools.AES().decrypt(req.body.data, token)
 
         Logger.log(taskModel, TaskController.name, "add")
 
-        useCase.verifyTaskLimit(token.uid, (error) => {
+        limitUseCase.verifyTaskLimit(token.uid, (error) => {
 
-            if(error){
+            if (error) {
                 super.onError(res, error);
             }
-            else{
-                useCase.saveTask(token.uid, taskModel, (error, task) => {
+            else {
+                addUseCase.saveTask(token.uid, taskModel, (error, task) => {
 
-                    if(error){
+                    if (error) {
                         super.onError(res, error);
                     }
-                    else{
-                        super.send(res, task ,new HTTPStatus.SUCESS.CREATED)
+                    else {
+                        super.send(res, task, new HTTPStatus.SUCESS.CREATED)
                     }
                 })
             }
@@ -51,39 +54,59 @@ export class TaskController extends BaseController {
     }
 
     public get(req: Request, res: Response) {
-        Task.find({}, (error, task) => {
+
+        let getTasksUseCase = new GetTasksUseCase()
+
+        getTasksUseCase.get(req.params.uid, (error, tasks) => {
             if (error) {
                 super.send(res, error, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
             }
-            super.send(res, task);
-        });
+            else {
+                super.send(res, tasks);
+            }
+        })
     }
 
     public getByID(req: Request, res: Response) {
-        Task.findById(req.params.taskID, (error, task) => {
+
+        let getTasksByIDUseCase = new GetTaskByIDUseCase()
+
+        getTasksByIDUseCase.getTaskByID(req.params.taskID, (error, task) => {
             if (error) {
-                super.send(res, error, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
+                super.onError(res, error);
             }
-            super.send(res, task);
-        });
+            else {
+                super.send(res, task)
+            }
+        })
     }
 
     public update(req: Request, res: Response) {
-        Task.findOneAndUpdate({ _id: req.params.taskID }, req.body, { new: true }, (error, task) => {
+
+        let updateTaskUseCase = new UpdateTaskUseCase()
+
+        updateTaskUseCase.update(req.params.taskID, req.body, (error, task) => {
             if (error) {
-                super.send(res, error, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
+                super.onError(res, error);
             }
-            super.send(res, task);
-        });
+            else {
+                super.send(res, task)
+            }
+        })
     }
 
     public delete(req: Request, res: Response) {
-        Task.remove({ _id: req.params.taskID }, (error, task) => {
+
+        let deleteTaskUseCase = new DeleteTaskUseCase()
+
+        deleteTaskUseCase.delete(req.params.taskID, (error, task) => {
             if (error) {
-                super.send(res, error, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
+                super.onError(res, error);
             }
-            super.send(res, task);
-        });
+            else {
+                super.send(res, task)
+            }
+        })
     }
 
 }
