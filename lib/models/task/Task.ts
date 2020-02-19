@@ -34,9 +34,9 @@ const recurrence = new Schema({
         type: Boolean,
         required: true
     },
-    weekly: [weekly],
+    weekly: weekly,
 
-    monthly: [monthly]
+    monthly: monthly
 
 }, { usePushEach: true });
 
@@ -53,6 +53,10 @@ export const TaskSchema = new Schema({
         type: String,
         required: 'Email required'
     },
+    picture: {
+        type: String,
+        required: false
+    },
     created: {
         type: Date,
         default: Date.now
@@ -61,10 +65,14 @@ export const TaskSchema = new Schema({
         type: Number,
         default: Date.now
     },
+    isGroup: {
+        type: Boolean,
+        default: false
+    },
     deadLine: {
         type: Date,
         required: false
     },
-    recurrence: [recurrence]
+    recurrence: recurrence
 
 }, { usePushEach: true });

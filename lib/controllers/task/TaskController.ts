@@ -30,7 +30,7 @@ export class TaskController extends BaseController {
 
         const token = new JWTSession(req.params.session);
 
-        let taskModel = CryptoTools.AES().decrypt(req.body.data, token)
+        let taskModel = Task(JSON.parse(JSON.stringify(req.body.data)))
 
         Logger.log(taskModel, TaskController.name, "add")
 
