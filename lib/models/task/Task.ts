@@ -45,6 +45,10 @@ export const TaskSchema = new Schema({
         type: String,
         required: 'uid required'
     },
+    groupId: {
+        type: String,
+        required: false
+    },
     title: {
         type: String,
         required: 'Name required'
@@ -64,10 +68,6 @@ export const TaskSchema = new Schema({
     goal: {
         type: Number,
         default: Date.now
-    },
-    isGroup: {
-        type: Boolean,
-        default: false
     },
     deadLine: {
         type: Date,
