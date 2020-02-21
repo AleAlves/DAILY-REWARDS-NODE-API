@@ -45,10 +45,6 @@ export const TaskSchema = new Schema({
         type: String,
         required: 'uid required'
     },
-    groupId: {
-        type: String,
-        required: false
-    },
     title: {
         type: String,
         required: 'Name required'
