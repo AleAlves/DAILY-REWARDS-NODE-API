@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import { HTTPStatus } from '../../models/http/HTTPStatus';
 
 import { TaskSchema } from '../../models/task/Task';
-import { UserSchema } from '../../models/user/UserModel';
 
 import { CryptoTools } from "../../security/CryptoTools";
 import { JWTSession } from "../../security/JWT/model/JWTSession";
@@ -13,26 +12,20 @@ import { BaseController } from "../BaseController"
 
 import { AddTaskUseCase } from "../../usecase/task/AddTaskUseCase"
 import { GetTasksUseCase } from "../../usecase/task/GetTasksUseCase"
-import { GetTaskByIDUseCase } from "../../usecase/task/GetTaskByIDUseCase"
 import { GetTasksLimitUseCase } from "../../usecase/task/GetTasksLimitUseCase"
 import { UpdateTaskUseCase } from "../../usecase/task/UpdateTaskUseCase"
 import { DeleteTaskUseCase } from "../../usecase/task/DeleteTaskUseCase"
 
-const User = mongoose.model('User', UserSchema);
 const Task = mongoose.model('Task', TaskSchema);
 
 export class TaskController extends BaseController {
 
-    public add(req: Request, res: Response) {
+    public create(req: Request, res: Response) {
 
         let addUseCase = new AddTaskUseCase()
         let limitUseCase = new GetTasksLimitUseCase()
 
         const token = new JWTSession(req.params.session);
-
-        let taskModel = Task(JSON.parse(JSON.stringify(req.body.data)))
-
-        Logger.log(taskModel, TaskController.name, "add")
 
         limitUseCase.verifyTaskLimit(token.uid, (error) => {
 
@@ -40,6 +33,11 @@ export class TaskController extends BaseController {
                 super.onError(res, error);
             }
             else {
+
+                let taskModel = Task(JSON.parse(JSON.stringify(req.body.data)))
+
+                Logger.log(taskModel, TaskController.name, "add")
+
                 addUseCase.saveTask(token.uid, taskModel, (error, task) => {
 
                     if (error) {
@@ -63,20 +61,6 @@ export class TaskController extends BaseController {
             }
             else {
                 super.send(res, tasks);
-            }
-        })
-    }
-
-    public getByID(req: Request, res: Response) {
-
-        let getTasksByIDUseCase = new GetTaskByIDUseCase()
-
-        getTasksByIDUseCase.getTaskByID(req.params.taskID, (error, task) => {
-            if (error) {
-                super.onError(res, error);
-            }
-            else {
-                super.send(res, task)
             }
         })
     }

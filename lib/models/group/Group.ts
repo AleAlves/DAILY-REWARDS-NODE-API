@@ -5,7 +5,9 @@ const Schema = mongoose.Schema;
 
 export const GroupSchema = new Schema({
 
-    members: [String],
+    membersId: [String],
+
+    tasksId : [String],
 
     ownerUid: {
         type: String,
@@ -15,9 +17,13 @@ export const GroupSchema = new Schema({
         type: Number,
         default: 10
     },
-    name: {
+    title: {
         type: String,
         required: 'Group name required'
+    },
+    description: {
+        type: String,
+        required: 'Group description required'
     },
     picture: {
         type: String,

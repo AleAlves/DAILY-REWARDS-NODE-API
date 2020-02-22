@@ -15,6 +15,17 @@ export class HTTPStatus {
             }
         }
 
+        static GROUPS_LIMIT_REACHED = class implements Status {
+
+            code(): Number {
+                return 422
+            }
+
+            status(): String {
+                return "Groups limit reached"
+            }
+        }
+
         static DUPLICATED_REGISTER = class implements Status {
 
             code(): Number {
@@ -85,13 +96,27 @@ export class HTTPStatus {
         }
 
         static FORBIDDEN = class implements Status {
-            
+
             code(): Number {
                 return 403
             }
 
             status(): String {
                 return "Forbidden"
+            }
+        }
+    }
+
+    static SERVER_ERROR = class {
+
+        static INTERNAL_SERVER_ERROR = class implements Status {
+
+            code(): Number {
+                return 500
+            }
+
+            status(): String {
+                return "Internal Server Error"
             }
         }
     }

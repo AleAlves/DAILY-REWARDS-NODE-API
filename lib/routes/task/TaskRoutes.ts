@@ -14,21 +14,16 @@ export class TaskRoutes extends BaseRouter {
         this.root = root
         this.add()
         this.get()
-        this.getWithID()
         this.update()
         this.delete()
     }
 
     private add() {
-        this.app.route(this.root + "v1" + '/task').post(super.sessionControl(), this.taskController.add)
+        this.app.route(this.root + "v1" + '/task').post(super.sessionControl(), this.taskController.create)
     }
 
     private get() {
         this.app.route(this.root + "v1" + '/task').get(super.sessionControl(), this.taskController.get)
-    }
-
-    private getWithID() {
-        this.app.route(this.root + "v1" + '/task/:taskID').get(super.sessionControl(), this.taskController.getByID)
     }
 
     private update() {

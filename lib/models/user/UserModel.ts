@@ -27,5 +27,9 @@ export const UserSchema = new Schema({
     allowedTasks : {
         type: Number,
         default: 5
+    },
+    allowedGroups : {
+        type: Number,
+        default: 2
     }
 });
