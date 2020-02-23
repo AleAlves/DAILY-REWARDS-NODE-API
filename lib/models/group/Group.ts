@@ -3,11 +3,35 @@ import * as mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
+const Members = new Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    uid: {
+        type: String,
+        required: true
+    }
+
+}, { usePushEach: true });
+
+const Tasks = new Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    id: {
+        type: String,
+        required: true
+    }
+
+}, { usePushEach: true });
+
 export const GroupSchema = new Schema({
 
-    membersId: [String],
+    members: [Members],
 
-    tasksId : [String],
+    tasks : [Tasks],
 
     ownerUid: {
         type: String,
