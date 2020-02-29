@@ -11,7 +11,7 @@ class App {
 
   public app: express.Application;
   public router: Router = new Router();
-  public mongoUrl: string = process.env.DATA_BASE || 'mongodb://127.0.0.1:27017/' + packageInfo.name + '-database';
+  public mongoUrl: string = process.env.MONGO_DATA_BASE || 'mongodb://127.0.0.1:27017/' + packageInfo.name + '-database';
 
   constructor() {
     this.app = express();
