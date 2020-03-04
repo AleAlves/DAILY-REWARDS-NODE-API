@@ -10,6 +10,8 @@ import { JWTSession } from "../../security/JWT/model/JWTSession";
 import { CreateGroupUseCase } from "../../usecase/group/CreateGroupUseCase"
 import { GetGroupLimitUseCase } from "../../usecase/group/GetGroupLimitUseCase"
 import { GetGroupsUseCase } from "../../usecase/group/GetGroupsUseCase"
+import { UpdateGroupUseCase } from "../../usecase/group/UpdateGroupUseCase"
+import { DeleteGroupUseCase } from "../../usecase/group/DeleteGroupUseCase"
 
 const Group = mongoose.model('Group', GroupSchema);
 
@@ -59,10 +61,29 @@ export class GroupController extends BaseController {
     }
 
     public update(req: Request, res: Response) {
+        let updateGroupkUseCase = new UpdateGroupUseCase()
 
+        updateGroupkUseCase.update(req.params.groupID, req.body, (error, task) => {
+            if (error) {
+                super.onError(res, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR, error);
+            }
+            else {
+                super.send(res, task)
+            }
+        })
     }
 
     public delete(req: Request, res: Response) {
 
+        let deleteTaskUseCase = new DeleteGroupUseCase()
+
+        deleteTaskUseCase.delete(req.params.taskID, (error, task) => {
+            if (error) {
+                super.onError(res, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR, error);
+            }
+            else {
+                super.send(res, task)
+            }
+        })
     }
 }

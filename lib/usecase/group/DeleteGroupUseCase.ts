@@ -1,0 +1,21 @@
+import * as mongoose from 'mongoose';
+
+import { GroupSchema } from '../../models/group/Group';
+import { HTTPStatus } from '../../models/http/HTTPStatus';
+
+const Group = mongoose.model('Group', GroupSchema);
+
+export class DeleteGroupUseCase {
+
+    public delete(id: String, callback) {
+
+        Group.remove({ _id: id }, (error, task) => {
+            if (error) {
+                callback(error)
+            }
+            else {
+                callback(task)
+            }
+        });
+    }
+} 
