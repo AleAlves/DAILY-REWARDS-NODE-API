@@ -9,9 +9,9 @@ const Task = mongoose.model('Task', TaskSchema);
 
 export class UpdateTaskUseCase {
 
-    public update(id: String, taskModel, callback) {
+    public update(uid: String, id: String, taskModel, callback) {
 
-        Task.findOneAndUpdate({ _id: id }, taskModel, { new: true }, (error, task) => {
+        Task.findOneAndUpdate({ _id: id, onwerUid: uid }, taskModel, { new: true }, (error, task) => {
             if (error) {
                 return callback(error, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
             }

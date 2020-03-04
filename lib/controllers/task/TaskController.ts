@@ -25,12 +25,12 @@ export class TaskController extends BaseController {
         let addUseCase = new AddTaskUseCase()
         let limitUseCase = new GetTasksLimitUseCase()
 
-        const token = new JWTSession(req.params.session);
+        const token = new JWTSession(req.params.session)
 
         limitUseCase.verifyTaskLimit(token.uid, (error) => {
 
             if (error) {
-                super.onError(res, error);
+                super.onError(res, error)
             }
             else {
 
@@ -54,8 +54,9 @@ export class TaskController extends BaseController {
     public get(req: Request, res: Response) {
 
         let getTasksUseCase = new GetTasksUseCase()
+        const token = new JWTSession(req.params.session)
 
-        getTasksUseCase.get(req.params.uid, (error, tasks) => {
+        getTasksUseCase.get(token.uid, (error, tasks) => {
             if (error) {
                 super.onError(res, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR, error);
             }
@@ -68,8 +69,9 @@ export class TaskController extends BaseController {
     public update(req: Request, res: Response) {
 
         let updateTaskUseCase = new UpdateTaskUseCase()
+        const token = new JWTSession(req.params.session)
 
-        updateTaskUseCase.update(req.params.taskID, req.body, (error, task) => {
+        updateTaskUseCase.update(token.uid, req.params.taskID, req.body, (error, task) => {
             if (error) {
                 super.onError(res, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR, error);
             }
@@ -82,8 +84,9 @@ export class TaskController extends BaseController {
     public delete(req: Request, res: Response) {
 
         let deleteTaskUseCase = new DeleteTaskUseCase()
+        const token = new JWTSession(req.params.session)
 
-        deleteTaskUseCase.delete(req.params.taskID, (error, task) => {
+        deleteTaskUseCase.delete(token.uid, req.params.taskID, (error, task) => {
             if (error) {
                 super.onError(res, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR, error);
             }

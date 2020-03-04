@@ -21,22 +21,21 @@ export class GroupController extends BaseController {
 
         let createUseCase = new CreateGroupUseCase()
         let limitUseCase = new GetGroupLimitUseCase()
-
-        const token = new JWTSession(req.params.session);
+        const token = new JWTSession(req.params.session)
 
         limitUseCase.verifyGroupLimit(token.uid, (error) => {
 
-            if(error){
+            if (error) {
                 super.onError(res, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR, error);
             }
-            else{
+            else {
                 let groupModel = Group(JSON.parse(JSON.stringify(req.body.data)))
 
                 createUseCase.create(token.uid, groupModel, (error, task) => {
-                    if(error){
+                    if (error) {
                         super.onError(res, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR, error);
                     }
-                    else{
+                    else {
                         super.send(res, task, new HTTPStatus.SUCESS.CREATED)
                     }
                 })
@@ -47,8 +46,7 @@ export class GroupController extends BaseController {
     public get(req: Request, res: Response) {
 
         let getUseCase = new GetGroupsUseCase()
-        
-        const token = new JWTSession(req.params.session);
+        const token = new JWTSession(req.params.session)
 
         getUseCase.get(token.uid, (error, groups) => {
             if (error) {
@@ -61,9 +59,11 @@ export class GroupController extends BaseController {
     }
 
     public update(req: Request, res: Response) {
-        let updateGroupkUseCase = new UpdateGroupUseCase()
 
-        updateGroupkUseCase.update(req.params.groupID, req.body, (error, task) => {
+        let updateGroupkUseCase = new UpdateGroupUseCase()
+        const token = new JWTSession(req.params.session)
+
+        updateGroupkUseCase.update(token.uid, req.params.groupID, req.body, (error, task) => {
             if (error) {
                 super.onError(res, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR, error);
             }
@@ -76,8 +76,9 @@ export class GroupController extends BaseController {
     public delete(req: Request, res: Response) {
 
         let deleteTaskUseCase = new DeleteGroupUseCase()
+        const token = new JWTSession(req.params.session)
 
-        deleteTaskUseCase.delete(req.params.taskID, (error, task) => {
+        deleteTaskUseCase.delete(token.uid, req.params.taskID, (error, task) => {
             if (error) {
                 super.onError(res, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR, error);
             }

@@ -9,9 +9,9 @@ const Task = mongoose.model('Task', TaskSchema);
 
 export class DeleteTaskUseCase {
 
-    public delete(id: String, callback) {
+    public delete(uid: String, id: String, callback) {
 
-        Task.remove({ _id: id }, (error, task) => {
+        Task.remove({ _id: id, onwerUid: uid }, (error, task) => {
             if (error) {
                 callback(error)
             }
