@@ -21,9 +21,9 @@ export class BaseController {
         return
     }
 
-    public onError(res: Response, status?: Status) {
+    public onError(res: Response, status?: Status, message?: String) {
         Logger.log(undefined, BaseController.name, "send")
-        res.send(new HTTPResponse(undefined, status, undefined))
+        res.send(new HTTPResponse(undefined, status, message))
         return
     }
 

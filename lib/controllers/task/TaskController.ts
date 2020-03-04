@@ -41,7 +41,7 @@ export class TaskController extends BaseController {
                 addUseCase.saveTask(token.uid, taskModel, (error, task) => {
 
                     if (error) {
-                        super.onError(res, error);
+                        super.onError(res, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR, error);
                     }
                     else {
                         super.send(res, task, new HTTPStatus.SUCESS.CREATED)
@@ -57,7 +57,7 @@ export class TaskController extends BaseController {
 
         getTasksUseCase.get(req.params.uid, (error, tasks) => {
             if (error) {
-                super.send(res, error, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
+                super.onError(res, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR, error);
             }
             else {
                 super.send(res, tasks);
@@ -71,7 +71,7 @@ export class TaskController extends BaseController {
 
         updateTaskUseCase.update(req.params.taskID, req.body, (error, task) => {
             if (error) {
-                super.onError(res, error);
+                super.onError(res, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR, error);
             }
             else {
                 super.send(res, task)
@@ -85,7 +85,7 @@ export class TaskController extends BaseController {
 
         deleteTaskUseCase.delete(req.params.taskID, (error, task) => {
             if (error) {
-                super.onError(res, error);
+                super.onError(res, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR, error);
             }
             else {
                 super.send(res, task)

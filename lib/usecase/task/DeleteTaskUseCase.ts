@@ -13,7 +13,7 @@ export class DeleteTaskUseCase {
 
         Task.remove({ _id: id }, (error, task) => {
             if (error) {
-                callback(error, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST)
+                callback(error)
             }
             else {
                 callback(task)

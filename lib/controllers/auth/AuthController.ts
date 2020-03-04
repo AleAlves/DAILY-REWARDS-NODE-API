@@ -36,13 +36,14 @@ export class AuthController extends BaseController {
             return
         } catch (error) {
             Logger.log(token, AuthController.name, "validateToken")
-            super.send(res, new JWTStatusModel(false))
+            super.onError(res, new HTTPStatus.CLIENT_ERROR.UNAUTHORIZED)
             return
         }
     }
 
     public accessToken(req: Request, res: Response) {
         let body = JSON.parse(JSON.stringify(req.body))
+        
         let plainData = CryptoTools.RSA().decrypt(req.body.data, "json")
         let session = new JWTSession(plainData, JWTType.ACCESS)
         let encrypted = CryptoTools.JWT().signAccessToken(session)
@@ -73,14 +74,14 @@ export class AuthController extends BaseController {
         Logger.log(userModel, AuthController.name, "login", "userModel")
 
         if (userModel == null) {
-            super.send(res, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST)
+            super.onError(res, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST)
             return
         }
 
         User.findOne({ 'uid': userModel.uid }, (error, user) => {
             if (error) {
                 Logger.log(error, AuthController.name, "findOne")
-                super.send(res, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
+                super.onError(res, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST, error);
                 return
             }
             if (user) {
@@ -102,7 +103,7 @@ export class AuthController extends BaseController {
                 userModel.save((error, user) => {
                     if (error) {
                         Logger.log(error, AuthController.name, "save")
-                        super.send(res, undefined, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
+                        super.onError(res, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST, error);
                         return
                     }
 

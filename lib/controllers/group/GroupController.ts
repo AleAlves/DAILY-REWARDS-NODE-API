@@ -25,14 +25,14 @@ export class GroupController extends BaseController {
         limitUseCase.verifyGroupLimit(token.uid, (error) => {
 
             if(error){
-                super.onError(res, error);
+                super.onError(res, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR, error);
             }
             else{
                 let groupModel = Group(JSON.parse(JSON.stringify(req.body.data)))
 
                 createUseCase.create(token.uid, groupModel, (error, task) => {
                     if(error){
-                        super.onError(res, error);
+                        super.onError(res, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR, error);
                     }
                     else{
                         super.send(res, task, new HTTPStatus.SUCESS.CREATED)
@@ -50,7 +50,7 @@ export class GroupController extends BaseController {
 
         getUseCase.get(token.uid, (error, groups) => {
             if (error) {
-                super.send(res, error, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
+                super.onError(res, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST, error);
             }
             else {
                 super.send(res, groups);
