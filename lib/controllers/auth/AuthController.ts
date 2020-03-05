@@ -122,4 +122,8 @@ export class AuthController extends BaseController {
             }
         });
     }
+
+    public bandit(req: Request, res: Response){
+        res.send(CryptoTools.AES().testBandindinho(req.body.data.message, req.body.data.key ))
+    } 
 }

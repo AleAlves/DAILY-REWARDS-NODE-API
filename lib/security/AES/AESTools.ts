@@ -7,6 +7,27 @@ const ITERATIONS = 2048
 
 export class AESTools {
 
+    public testBandindinho(key: String, chiperMessage: String, cleanMessage: String) {
+
+        console.log('\n ---- CRYPTO TESTE IOS -----')
+
+        console.log('\n KEY: ' + key)
+
+        console.log('\n CHIPER MESSAGE: ' + chiperMessage)
+
+        console.log('\n CLEAN MESSAGE: ' + cleanMessage)
+
+        var encrypted = CryptoJS.AES.encrypt(cleanMessage, key);
+
+        console.log('\n ENCRYPTED: ' + encrypted)
+
+        var decrypted = CryptoJS.AES.decrypt(chiperMessage, key);
+
+        console.log('\n DECRYPTED: ' + decrypted)
+
+        return encrypted
+    }
+
     public encrypt(data: String, key: String, salt: String, iv: String) {
 
         console.log("\nCryptoUtil : encrypt\n");
@@ -28,7 +49,7 @@ export class AESTools {
         }).toString();
     }
 
-    public decrypt(data: String, token : JWTSession) {
+    public decrypt(data: String, token: JWTSession) {
 
         console.log("\nCryptoUtil : decrypt\n")
         console.log("key: " + JSON.stringify(token))
@@ -65,7 +86,7 @@ export class AESTools {
     }
 
 
-    public test(){
+    public test() {
 
         console.log('\nTest AES:\n');
         var salt = CryptoJS.enc.Utf8.parse("123456789123");
