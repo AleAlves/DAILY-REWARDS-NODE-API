@@ -13,10 +13,10 @@ export class DeleteTaskUseCase {
 
         Task.remove({ _id: id, onwerUid: uid }, (error, task) => {
             if (error) {
-                callback(error)
+                callback(error, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR)
             }
             else {
-                callback(task)
+                callback(undefined, task)
             }
         });
     }

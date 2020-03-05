@@ -14,7 +14,7 @@ export class CreateGroupUseCase {
 
             if (error) {
                 Logger.log(error, CreateGroupUseCase.name, "saveGroup")
-                return callback(new HTTPStatus.CLIENT_ERROR)
+                return callback(error, new HTTPStatus.CLIENT_ERROR)
             }
             else {
                 return callback(undefined, group)

@@ -16,7 +16,7 @@ export class UpdateTaskUseCase {
                 return callback(error, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
             }
             else {
-                return callback(task);
+                return callback(undefined, task);
             }
         });
     }

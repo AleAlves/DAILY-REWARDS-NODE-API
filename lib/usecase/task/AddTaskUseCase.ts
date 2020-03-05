@@ -19,7 +19,7 @@ export class AddTaskUseCase {
 
             if (error) {
                 Logger.log(error, AddTaskUseCase.name, "saveTask")
-                return callback(new HTTPStatus.BUSINESS.TASKS_LIMIT_REACHED)
+                return callback(error, new HTTPStatus.BUSINESS.TASKS_LIMIT_REACHED)
             }
             else {
                 return callback(undefined, task)

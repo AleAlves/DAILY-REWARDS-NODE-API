@@ -11,10 +11,10 @@ export class DeleteGroupUseCase {
 
         Group.remove({ _id: id, onwerUid: uid }, (error, task) => {
             if (error) {
-                callback(error)
+                callback(error, new HTTPStatus.CLIENT_ERROR)
             }
             else {
-                callback(task)
+                callback(undefined, task)
             }
         });
     }

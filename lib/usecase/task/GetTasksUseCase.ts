@@ -13,7 +13,7 @@ export class GetTasksUseCase {
             if (error) {
                 return callback(error, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST)
             }
-            return callback(tasks)
+            return callback(undefined, tasks)
         });
     }
 } 

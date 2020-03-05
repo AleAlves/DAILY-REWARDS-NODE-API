@@ -13,7 +13,7 @@ export class GetGroupsUseCase {
             if (error) {
                 return callback(error, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST)
             }
-            return callback(groups)
+            return callback(undefined, groups)
         });
     }
 } 

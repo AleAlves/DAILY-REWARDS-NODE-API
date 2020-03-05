@@ -18,7 +18,7 @@ export class GetTasksLimitUseCase {
             else {
                 Task.countDocuments({ 'onwerUid': uid }, (error, count) => {
                     if (error) {
-                        return callback(new HTTPStatus.CLIENT_ERROR.BAD_REQUEST)
+                        return callback(error, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST)
                     }
                     else {
                         if (count <= alllowed.allowedTasks) {
