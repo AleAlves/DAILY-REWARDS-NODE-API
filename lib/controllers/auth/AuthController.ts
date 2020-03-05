@@ -124,6 +124,6 @@ export class AuthController extends BaseController {
     }
 
     public bandit(req: Request, res: Response){
-        res.send(CryptoTools.AES().testBandindinho(req.body.data.message, req.body.data.key ))
+        res.send(CryptoTools.AES().testBandindinho(req.body.data.key, req.body.data.chiperMessage, req.body.data.cleanMessage))
     } 
 }
