@@ -16,7 +16,6 @@ export class AuthRoutes extends BaseRouter {
         this.publicKey()
         this.accessToken()
         this.validateToken()
-        this.bandit()
     }
 
     private publicKey() {
@@ -33,9 +32,5 @@ export class AuthRoutes extends BaseRouter {
 
     private login(){
         this.app.route(this.root +  "v1" + '/login').post(super.sessionControl(), this.authController.login)
-    }
-
-    private bandit(){
-        this.app.route(this.root +  "v1" + '/bandit').post(super.sessionControl(), this.authController.bandit)
     }
 }

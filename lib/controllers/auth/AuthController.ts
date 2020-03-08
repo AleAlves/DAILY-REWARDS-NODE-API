@@ -12,6 +12,7 @@ import { JWTType } from "../../security/JWT/model/JWTType"
 import { UserSchema } from '../../models/user/UserModel';
 import { HTTPStatus } from '../../models/http/HTTPStatus';
 import { Logger } from '../../tools/Logger'
+import { DeviceType } from '../../security/JWT/model/DeviceType';
 
 const User = mongoose.model('User', UserSchema);
 
@@ -64,8 +65,13 @@ export class AuthController extends BaseController {
         Logger.log(token, AuthController.name, "login", "Token")
 
         Logger.log(req.body.data, AuthController.name, "login", "userData")
-
-        let userData = CryptoTools.AES().decrypt(req.body.data, token)
+        var userData
+        if (token.deviceType == DeviceType.ANDROID) {
+            userData = CryptoTools.AES().decrypt(req.body.data, token)
+        } else {
+            userData = CryptoTools.AES().decryptCrypto(req.body.data, token)
+        }
+        
 
         Logger.log(userData, AuthController.name, "login", "userData")
 
@@ -122,8 +128,4 @@ export class AuthController extends BaseController {
             }
         });
     }
-
-    public bandit(req: Request, res: Response){
-        res.send(CryptoTools.AES().testBandindinho(req.body.data.key, req.body.data.chiperMessage, req.body.data.cleanMessage))
-    } 
 }

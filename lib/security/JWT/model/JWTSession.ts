@@ -1,4 +1,5 @@
 import { JWTType } from "../model/JWTType"
+import { DeviceType } from "../model/DeviceType"
 
 export class JWTSession {
     
@@ -9,6 +10,7 @@ export class JWTSession {
     AESSalt: String
     created: number
     type: JWTType
+    deviceType: DeviceType
 
     constructor(clientAESData: any, type?: JWTType) {
         this.userID = clientAESData.id
@@ -16,6 +18,7 @@ export class JWTSession {
         this.AESIV = clientAESData.AESIV.replace(/(\r\n|\n|\r)/gm, "");
         this.AESKey = clientAESData.AESKey.replace(/(\r\n|\n|\r)/gm, "");
         this.AESSalt = clientAESData.AESSalt.replace(/(\r\n|\n|\r)/gm, "");
+        this.deviceType = clientAESData.deviceType
         this.created = Date.now()
         this.type = type
     }

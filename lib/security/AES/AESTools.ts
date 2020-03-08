@@ -2,31 +2,11 @@
 import { JWTSession } from "../../security/JWT/model/JWTSession";
 
 const CryptoJS = require('crypto-js');
+const Crypto = require('crypto');
 const KEY_SIZE = 8
 const ITERATIONS = 2048
 
 export class AESTools {
-
-    public testBandindinho(key: String, chiperMessage: String, cleanMessage: String) {
-
-        console.log('\n ---- CRYPTO TESTE IOS -----')
-
-        console.log('\n KEY: ' + key)
-
-        console.log('\n CHIPER MESSAGE: ' + chiperMessage)
-
-        console.log('\n CLEAN MESSAGE: ' + cleanMessage)
-
-        var encrypted = CryptoJS.AES.encrypt(cleanMessage, key);
-
-        console.log('\n ENCRYPTED: ' + encrypted)
-
-        var decrypted = CryptoJS.AES.decrypt(chiperMessage, key);
-
-        console.log('\n DECRYPTED: ' + decrypted)
-
-        return encrypted
-    }
 
     public encrypt(data: String, key: String, salt: String, iv: String) {
 
@@ -67,7 +47,7 @@ export class AESTools {
 
         var keyBits = CryptoJS.PBKDF2(key, salt, {
             hasher: CryptoJS.algo.SHA1,
-            keySize: KEY_SIZE,
+            keySize: key.length,
             iterations: ITERATIONS
         });
 
@@ -85,6 +65,55 @@ export class AESTools {
         }).toString(CryptoJS.enc.Utf8).replace("\\", "")));
     }
 
+    public encryptCrypto(data: String, key: String, salt: String, iv: String) {
+
+        console.log("\nCryptoUtil : encrypt\n");
+        console.log("key: " + key);
+        let saltCrypto = salt;
+        let keyCrypto = key;
+        let keySecret = Crypto.pbkdf2Sync(keyCrypto, saltCrypto, 1000, 32, "sha1");
+        let ivCrypto = iv;
+        let algorithm = 'aes-256-cbc';
+
+        console.log('\n ---- CRYPTO -----')
+        console.log('iv: ' + ivCrypto)
+        console.log('key: ' + keyCrypto)
+        console.log('salt: ' + saltCrypto)
+        console.log('cipherData: ' + data)
+        console.log('secretKey: ' + keySecret)
+        console.log('algorithm: ' + algorithm)
+        console.log('\n ---- CRYPTO -----\n')
+
+        var cipher = Crypto.createCipheriv(algorithm, keySecret, ivCrypto);
+        var crypted = cipher.update(data, 'utf8', 'base64');
+        crypted += cipher.final('base64');
+        return crypted;
+    }
+
+    public decryptCrypto(data: String, token: JWTSession) {
+
+        let saltCrypto = token.AESSalt;
+        let keyCrypto = token.AESKey;
+        let keySecret = Crypto.pbkdf2Sync(keyCrypto, saltCrypto, 1000, 32, "sha1");
+        let ivCrypto = token.AESIV;
+        let algorithm = 'aes-256-cbc';
+
+        console.log("\nCryptoUtil : decrypt\n")
+        console.log("token: " + JSON.stringify(token))
+        console.log('\n ---- CRYPTO -----')
+        console.log('iv: ' + ivCrypto)
+        console.log('key: ' + keyCrypto)
+        console.log('salt: ' + saltCrypto)
+        console.log('cipherData: ' + data)
+        console.log('secretKey: ' + keySecret)
+        console.log('algorithm: ' + algorithm)
+        console.log('\n ---- CRYPTO -----\n')
+
+        var decipher = Crypto.createDecipheriv(algorithm, keySecret, ivCrypto);
+        var dec = decipher.update(data, 'base64', 'utf8');
+        dec += decipher.final('utf8');
+        return JSON.parse(JSON.stringify(dec));
+    }
 
     public test() {
 
