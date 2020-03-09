@@ -66,12 +66,8 @@ export class AuthController extends BaseController {
 
         Logger.log(req.body.data, AuthController.name, "login", "userData")
         var userData
-        if (token.deviceType == DeviceType.ANDROID) {
-            userData = CryptoTools.AES().decrypt(req.body.data, token)
-        } else {
-            userData = CryptoTools.AES().decryptCrypto(req.body.data, token)
-        }
         
+        userData = CryptoTools.AES().decryptCrypto(req.body.data, token)
 
         Logger.log(userData, AuthController.name, "login", "userData")
 
