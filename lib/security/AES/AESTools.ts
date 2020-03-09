@@ -10,7 +10,7 @@ const ENCODE = "base64"
 
 export class AESTools {
 
-    public encryptCrypto(data: String, key: String, salt: String, iv: String) {
+    public encrypt(data: String, key: String, salt: String, iv: String) {
 
         console.log("\nCryptoUtil : encrypt\n");
         console.log("key: " + key)
@@ -36,7 +36,7 @@ export class AESTools {
         return crypted;
     }
 
-    public decryptCrypto(data: String, token: JWTSession) {
+    public decrypt(data: String, token: JWTSession) {
 
         let saltCrypto = token.AESSalt
         let keyCrypto = token.AESKey

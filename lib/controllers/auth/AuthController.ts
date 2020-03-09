@@ -67,7 +67,7 @@ export class AuthController extends BaseController {
         Logger.log(req.body.data, AuthController.name, "login", "userData")
         var userData
         
-        userData = CryptoTools.AES().decryptCrypto(req.body.data, token)
+        userData = CryptoTools.AES().decrypt(req.body.data, token)
 
         Logger.log(userData, AuthController.name, "login", "userData")
 
