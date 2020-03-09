@@ -71,7 +71,7 @@ export class AESTools {
         console.log("key: " + key);
         let saltCrypto = salt;
         let keyCrypto = key;
-        let keySecret = Crypto.pbkdf2Sync(keyCrypto, saltCrypto, 1000, 32, "sha1");
+        let keySecret = Crypto.pbkdf2Sync(keyCrypto, saltCrypto, 2048, 32, "sha1");
         let ivCrypto = iv;
         let algorithm = 'aes-256-cbc';
 
@@ -94,7 +94,7 @@ export class AESTools {
 
         let saltCrypto = token.AESSalt;
         let keyCrypto = token.AESKey;
-        let keySecret = Crypto.pbkdf2Sync(keyCrypto, saltCrypto, 1000, 32, "sha1");
+        let keySecret = Crypto.pbkdf2Sync(keyCrypto, saltCrypto, 2048, 32, "sha1");
         let ivCrypto = token.AESIV;
         let algorithm = 'aes-256-cbc';
 
