@@ -5,7 +5,6 @@ import { Router } from "./routes/Router";
 import * as mongoose from "mongoose";
 const packageInfo = require('../package.json');
 const expressOasGenerator = require('express-oas-generator');
-const DEVELOPMENT = process.env.DEVELOPMENT_ENV || true
 
 class App {
 
@@ -32,7 +31,7 @@ class App {
   }
 
   private swagger() {
-    if (DEVELOPMENT) {
+    if (Environment.Instance.isProduction) {
       expressOasGenerator.handleResponses(this.app);
       expressOasGenerator.handleRequests();
     }

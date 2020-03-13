@@ -16,6 +16,7 @@ export class AuthRoutes extends BaseRouter {
         this.publicKey()
         this.accessToken()
         this.validateToken()
+        this.accessTokenPostman()
     }
 
     private publicKey() {
@@ -24,6 +25,10 @@ export class AuthRoutes extends BaseRouter {
 
     private accessToken(){
         this.app.route(this.root +  "v1" + '/access-token').post(this.authController.accessToken)
+    }
+
+    private accessTokenPostman(){
+        this.app.route(this.root +  "v1" + '/access-token-postman').post(this.authController.accessToken)
     }
 
     private validateToken(){

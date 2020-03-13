@@ -44,7 +44,7 @@ export class AuthController extends BaseController {
 
     public accessToken(req: Request, res: Response) {
         let body = JSON.parse(JSON.stringify(req.body))
-        
+
         let plainData = CryptoTools.RSA().decrypt(req.body.data, "json")
         let session = new JWTSession(plainData, JWTType.ACCESS)
         let encrypted = CryptoTools.JWT().signAccessToken(session)
@@ -52,11 +52,11 @@ export class AuthController extends BaseController {
 
         Logger.log(body, AuthController.name, "accessToken", "body")
         Logger.log(plainData, AuthController.name, "accessToken", "plain")
-        Logger.log(session, AuthController.name, "accessToken" , "session")
+        Logger.log(session, AuthController.name, "accessToken", "session")
         Logger.log(accessToken, AuthController.name, "accessToken", "accessToken")
 
         super.send(res, accessToken)
-    }
+    } 
 
     public login(req: Request, res: Response) {
 
@@ -65,9 +65,10 @@ export class AuthController extends BaseController {
         Logger.log(token, AuthController.name, "login", "Token")
 
         Logger.log(req.body.data, AuthController.name, "login", "userData")
-        var userData
-        
-        userData = CryptoTools.AES().decrypt(req.body.data, token)
+        var userData = req.body.data
+        if (Environment.Instance.isProduction) {
+            userData = CryptoTools.AES().decrypt(req.body.data, token)
+        }
 
         Logger.log(userData, AuthController.name, "login", "userData")
 
@@ -91,11 +92,11 @@ export class AuthController extends BaseController {
                 token.userID = user._id
 
                 token.uid = user.uid
-        
+
                 let session = new JWTSession(token, JWTType.SESSION)
-        
+
                 let sessionTokenEncrypted = CryptoTools.JWT().signSessionToken(session)
-        
+
                 let sessionToken = JSON.parse(JSON.stringify(new SessionTokenModel(sessionTokenEncrypted)))
 
                 super.send(res, sessionToken)
@@ -112,11 +113,11 @@ export class AuthController extends BaseController {
                     token.userID = user._id
 
                     token.uid = user.firebaseID
-            
+
                     let session = new JWTSession(token, JWTType.SESSION)
-            
+
                     let sessionTokenEncrypted = CryptoTools.JWT().signSessionToken(session)
-            
+
                     let sessionToken = JSON.parse(JSON.stringify(new SessionTokenModel(sessionTokenEncrypted)))
 
                     super.send(res, sessionToken)
