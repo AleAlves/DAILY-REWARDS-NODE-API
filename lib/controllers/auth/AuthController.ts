@@ -12,7 +12,7 @@ import { JWTType } from "../../security/JWT/model/JWTType"
 import { UserSchema } from '../../models/user/UserModel';
 import { HTTPStatus } from '../../models/http/HTTPStatus';
 import { Logger } from '../../tools/Logger'
-import { DeviceType } from '../../security/JWT/model/DeviceType';
+import { Environment } from "../../tools/Environment";
 
 const User = mongoose.model('User', UserSchema);
 
@@ -60,19 +60,20 @@ export class AuthController extends BaseController {
 
     public login(req: Request, res: Response) {
 
-        const token = new JWTSession(req.params.access);
-
-        Logger.log(token, AuthController.name, "login", "Token")
-
+        var token
         Logger.log(req.body.data, AuthController.name, "login", "userData")
         var userData = req.body.data
         if (Environment.Instance.isProduction) {
+            token = new JWTSession(req.params.access);
             userData = CryptoTools.AES().decrypt(req.body.data, token)
+        } else {
+            token = new JWTSession(JWTSession.devSessionToken(userData.uid));
         }
+        Logger.log(token, AuthController.name, "login", "Token")
 
         Logger.log(userData, AuthController.name, "login", "userData")
 
-        let userModel = User(JSON.parse(userData))
+        let userModel = User(JSON.parse(JSON.stringify(userData)))
 
         Logger.log(userModel, AuthController.name, "login", "userModel")
 

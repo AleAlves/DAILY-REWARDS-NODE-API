@@ -71,7 +71,7 @@ export class TaskController extends BaseController {
         let updateTaskUseCase = new UpdateTaskUseCase()
         const token = new JWTSession(req.params.session)
 
-        updateTaskUseCase.update(token.uid, req.params.taskID, req.body, (error, task) => {
+        updateTaskUseCase.update(token.uid, req.body.data.taskID, req.body.data.updatedTask, (error, task) => {
             if (error) {
                 super.onError(res, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR, error);
             }

@@ -27,7 +27,7 @@ export class TaskRoutes extends BaseRouter {
     }
 
     private update() {
-        this.app.route(this.root + "v1" + '/task/:taskID').post(super.sessionControl(), this.taskController.update)
+        this.app.route(this.root + "v1" + '/task/?taskID=').put(super.sessionControl(), this.taskController.update)
     }
 
     private delete() {

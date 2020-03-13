@@ -51,7 +51,7 @@ export const TaskSchema = new Schema({
     },
     description: {
         type: String,
-        required: 'Email required'
+        required: 'Description required'
     },
     picture: {
         type: String,

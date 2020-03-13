@@ -1,4 +1,4 @@
-class Environment {
+export class Environment {
     private static _instance: Environment;
     private constructor() {
         //...

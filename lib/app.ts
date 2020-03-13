@@ -3,6 +3,7 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import { Router } from "./routes/Router";
 import * as mongoose from "mongoose";
+import { Environment } from "./tools/Environment"
 const packageInfo = require('../package.json');
 const expressOasGenerator = require('express-oas-generator');
 

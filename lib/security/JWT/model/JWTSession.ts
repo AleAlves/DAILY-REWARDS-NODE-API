@@ -22,4 +22,15 @@ export class JWTSession {
         this.created = Date.now()
         this.type = type
     }
+
+    public static devSessionToken(uid: String) {
+        return {
+            id:"",
+            uid: uid,
+            AESIV: "AESIVDev",
+            AESKey:"AESKEYDev",
+            AESSalt:"AESSATDev",
+            deviceType:"AESDEVICETYPEDev"
+        }
+    }
 }
