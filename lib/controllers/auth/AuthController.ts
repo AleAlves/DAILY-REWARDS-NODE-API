@@ -1,18 +1,19 @@
 
-import * as mongoose from 'mongoose';
-import { Request, Response } from "express";
+import * as mongoose from 'mongoose'
+import { Request, Response } from "express"
 import { BaseController } from "../BaseController"
-import { CryptoTools } from "../../security/CryptoTools";
-import { PublicKey } from "../../security/RSA/model/PublicKey";
-import { JWTSession } from "../../security/JWT/model/JWTSession";
-import { JWTStatusModel } from "../../security/JWT/model/JWTStatusModel";
-import { SessionTokenModel } from "../../security/JWT/model/SessionTokenModel";
-import { AccessTokenModel } from "../../security/JWT/model/AccessTokenModel";
+import { CryptoTools } from "../../security/CryptoTools"
+import { PublicKey } from "../../security/RSA/model/PublicKey"
+import { JWTSession } from "../../security/JWT/model/JWTSession"
+import { JWTStatusModel } from "../../security/JWT/model/JWTStatusModel"
+import { SessionTokenModel } from "../../security/JWT/model/SessionTokenModel"
+import { AccessTokenModel } from "../../security/JWT/model/AccessTokenModel"
 import { JWTType } from "../../security/JWT/model/JWTType"
-import { UserSchema } from '../../models/user/UserModel';
-import { HTTPStatus } from '../../models/http/HTTPStatus';
+import { UserSchema } from '../../models/user/UserModel'
+import { HTTPStatus } from '../../models/http/HTTPStatus'
 import { Logger } from '../../tools/Logger'
-import { Environment } from "../../tools/Environment";
+import { Environment } from "../../tools/Environment"
+import { JsonUtils } from '../../tools/JsonUtils'
 
 const User = mongoose.model('User', UserSchema);
 
@@ -65,15 +66,21 @@ export class AuthController extends BaseController {
         var userData = req.body.data
         if (Environment.Instance.isProduction) {
             token = new JWTSession(req.params.access);
-            userData = CryptoTools.AES().decrypt(req.body.data, token)
+            userData = CryptoTools.AES().decrypt(userData, token)
         } else {
-            token = new JWTSession(JWTSession.devSessionToken(userData.uid));
+            token = new JWTSession(req.params.access ?? JWTSession.devSessionToken(userData.uid));
+            if(JsonUtils.isEncrypted(userData, token)) {
+                userData = JsonUtils.getJson(CryptoTools.AES().decrypt(userData, token))
+            } else {
+                userData = JsonUtils.getJson(JSON.stringify(userData))
+            }
         }
+        
         Logger.log(token, AuthController.name, "login", "Token")
 
         Logger.log(userData, AuthController.name, "login", "userData")
 
-        let userModel = User(JSON.parse(JSON.stringify(userData)))
+        let userModel = User(userData)
 
         Logger.log(userModel, AuthController.name, "login", "userModel")
 
