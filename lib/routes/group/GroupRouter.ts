@@ -28,10 +28,10 @@ export class GroupRouter extends BaseRouter {
     }
 
     private update() {
-        this.app.route(this.root + "v1" + '/group/:groupID').post(super.sessionControl(), this.groupController.update)
+        this.app.route(this.root + "v1" + '/group').put(super.sessionControl(), this.groupController.update)
     }
 
     private delete() {
-        this.app.route(this.root + "v1" + '/group/:groupID').delete(super.sessionControl(), this.groupController.delete)
+        this.app.route(this.root + "v1" + '/group/:groupId').delete(super.sessionControl(), this.groupController.delete)
     }
 }

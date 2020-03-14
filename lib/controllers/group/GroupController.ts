@@ -75,10 +75,10 @@ export class GroupController extends BaseController {
 
     public delete(req: Request, res: Response) {
 
-        let deleteTaskUseCase = new DeleteGroupUseCase()
+        let deleteGroupUseCase = new DeleteGroupUseCase()
         const token = new JWTSession(req.params.session)
 
-        deleteTaskUseCase.delete(token.uid, req.params.taskID, (error, task) => {
+        deleteGroupUseCase.delete(token.uid, req.params.groupId, (error, task) => {
             if (error) {
                 super.onError(res, new HTTPStatus.SERVER_ERROR.INTERNAL_SERVER_ERROR, error);
             }
