@@ -9,7 +9,7 @@ export class DeleteGroupUseCase {
 
     public delete(uid: String, id: String, callback) {
 
-        Group.remove({ _id: id, onwerUid: uid }, (error, task) => {
+        Group.remove({ _id: id, ownerUid: uid }, (error, task) => {
             if (error) {
                 callback(error, new HTTPStatus.CLIENT_ERROR)
             }

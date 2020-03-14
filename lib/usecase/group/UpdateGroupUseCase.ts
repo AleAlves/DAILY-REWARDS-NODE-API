@@ -9,7 +9,7 @@ export class UpdateGroupUseCase {
 
     public update(uid: String, id: String, taskModel, callback) {
 
-        Group.findOneAndUpdate({ _id: id, onwerUid: uid }, taskModel, { new: true }, (error, task) => {
+        Group.findOneAndUpdate({ _id: id, ownerUid: uid }, taskModel, { new: true }, (error, task) => {
             if (error) {
                 return callback(error, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
             }

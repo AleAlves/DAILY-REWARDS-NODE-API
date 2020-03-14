@@ -41,7 +41,7 @@ const recurrence = new Schema({
 }, { usePushEach: true });
 
 export const TaskSchema = new Schema({
-    onwerUid: {
+    ownerUid: {
         type: String,
         required: 'uid required'
     },

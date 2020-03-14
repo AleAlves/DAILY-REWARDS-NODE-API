@@ -11,7 +11,7 @@ export class UpdateTaskUseCase {
 
     public update(uid: String, id: String, taskModel, callback) {
 
-        Task.findOneAndUpdate({ _id: id, onwerUid: uid }, taskModel, { new: true }, (error, task) => {
+        Task.findOneAndUpdate({ _id: id, ownerUid: uid }, taskModel, { new: true }, (error, task) => {
             if (error) {
                 return callback(error, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST);
             }

@@ -9,7 +9,7 @@ export class GetTasksUseCase {
 
     public get(uid: String, callback) {
 
-        Task.find({ 'onwerUid': uid }, (error, tasks) => {
+        Task.find({ 'ownerUid': uid }, (error, tasks) => {
             if (error) {
                 return callback(error, new HTTPStatus.CLIENT_ERROR.BAD_REQUEST)
             }

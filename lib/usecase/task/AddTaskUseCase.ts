@@ -13,7 +13,7 @@ export class AddTaskUseCase {
 
     public saveTask(uid: String, taskModel, callback) {
 
-        taskModel.onwerUid = uid
+        taskModel.ownerUid = uid
 
         taskModel.save((error, task) => {
 

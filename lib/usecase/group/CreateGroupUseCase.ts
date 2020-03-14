@@ -8,7 +8,7 @@ export class CreateGroupUseCase {
 
     public create(uid: String, groupModel, callback) {
 
-        groupModel.onwerUid = uid
+        groupModel.ownerUid = uid
 
         groupModel.save((error, group) => {
 
